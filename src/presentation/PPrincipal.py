@@ -35,8 +35,20 @@ class PPrincipal:
             excel_file_path=''
         )
 
-        # Crear los inputs
+        # Crear los componentes
+        self.create_menu()
         self.create_inputs()
+
+    def create_menu(self):
+        self.menu_bar = tk.Menu(self.root)
+        self.root.config(menu=self.menu_bar)
+        # Crear el menú "Archivo"
+        file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.menu_bar.add_cascade(label="Acerca de", menu=file_menu)
+        file_menu.add_command(label="Información de la aplicación", command=self.info_app)
+        file_menu.add_separator()
+        file_menu.add_command(label="Salir", command=self.root.quit)
+        
     
     def create_inputs(self):
         font_style_label = ("Arial", 12, "bold")
@@ -290,3 +302,14 @@ class PPrincipal:
             return False  # Indica que hay errores
 
         return True  # Todos los campos están completos
+    
+    def info_app(self):
+        description = 'Esta es una aplicación desarrollada para que el cliente (usuario de la aplicación) pueda descargar todas las facturas del SIAT de manera masiva y sencilla'
+        url_info = 'Los primeros datos como ser URL, NIT, CUF, NÚMERO DE FACTURA y TIPO \n Se refiere a la composición de la URL que maneja el SIAT para poder ver las facturas'
+        bd_info = 'Por lo cual esos son los mismos campos que se encuentra en el Excel que se descarga'
+        btn = 'El campo TEXTO DEL BOTÓN es un campo donde se tiene que poner el texto que se tiene en dicho voton al momento de ingresar al url del SIAT'
+        dir_des = 'El campo DIRECTORIO DE DESCARGAS es la carpeta donde se guardaran los PDFs descargados'
+        exc_bd = 'El campo DIRECTORIO DE EXCEL es el documento excel el cual será usado como Base de Datos'
+        use = 'Manual de Uso: Los'
+        
+        print(description)
