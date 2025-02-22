@@ -215,7 +215,6 @@ class PPrincipal:
             traceback.print_exc()  
             messagebox.showerror("Error", error_message)
 
-
     def join_all_pdfs(self):
 
         # Preguntar al usuario si está seguro
@@ -237,7 +236,8 @@ class PPrincipal:
 
         # Obtener la lista de archivos PDF en el directorio, ordenados por nombre ASCENDENTE
         pdf_files = sorted(
-            [f for f in os.listdir(download_dir) if f.lower().endswith(".pdf")]
+            [f for f in os.listdir(download_dir) if f.lower().endswith(".pdf")],
+            key=lambda x: os.path.getmtime(os.path.join(download_dir, x))
         )
 
         if not pdf_files:
@@ -257,16 +257,15 @@ class PPrincipal:
 
         messagebox.showinfo("Éxito", f"PDFs unidos exitosamente en:\n{output_pdf_path}")
 
-
     def download_bd_pdf(self):
         try:
             # 1️⃣ - CREAR DATOS DE EJEMPLO
             data = [
                 {
                     "nro": 1,
-                    "nit": 1028627025,
-                    "nro_factura": 195663,
-                    "cuf": "4661AB1B43247CC29DF49FF5AE324D277DA4378B675D0DA04E8449E74",
+                    "nit": 121212,
+                    "nro_factura": 123451,
+                    "cuf": "4661AB1B4112121212124E8449E74",
                     "tipo": 2
                 }
             ]
@@ -304,12 +303,28 @@ class PPrincipal:
         return True  # Todos los campos están completos
     
     def info_app(self):
-        description = 'Esta es una aplicación desarrollada para que el cliente (usuario de la aplicación) pueda descargar todas las facturas del SIAT de manera masiva y sencilla'
-        url_info = 'Los primeros datos como ser URL, NIT, CUF, NÚMERO DE FACTURA y TIPO \n Se refiere a la composición de la URL que maneja el SIAT para poder ver las facturas'
-        bd_info = 'Por lo cual esos son los mismos campos que se encuentra en el Excel que se descarga'
-        btn = 'El campo TEXTO DEL BOTÓN es un campo donde se tiene que poner el texto que se tiene en dicho voton al momento de ingresar al url del SIAT'
-        dir_des = 'El campo DIRECTORIO DE DESCARGAS es la carpeta donde se guardaran los PDFs descargados'
-        exc_bd = 'El campo DIRECTORIO DE EXCEL es el documento excel el cual será usado como Base de Datos'
-        use = 'Manual de Uso: Los'
-        
-        print(description)
+        description = f"Es una aplicación desarrollada para que el cliente (usuario de la aplicación) pueda descargar todas las facturas del SIAT de manera masiva y sencilla."
+        url_info = f"Los campos URL, NIT, CUF, NÚMERO DE FACTURA, y TIPO.\nSon campos de configuración para acceder al link del SIAT, pero ejemplo:\n\n https://siat.impuestos.gob.bo/consulta/QR?nit=12345&cuf=1231231231321313&numero=5555555&t=2"
+        campo_1 = 'CAMPOS EXTRAS:\n\n- DIRECTORIO DE DESCARGAS: carpeta donde se guardarán los PDFs descargados.\n'
+        btn = '- TEXTO DEL BOTÓN es un campo que contiene el texto del botón al momento de ingresar al url del SIAT y descargar la Factura.\n'
+        campo_2 = '- DIRECTORIO DE EXCEL: documento excel el cual será usado como Base de Datos.\n'
+        campo_3 = '- TIEMPO DE DESCARGA: segundos que espera entre descargas de PDF (Recomendado 2 segundos).'
+        use = 'MANUAL DE USO:\n'
+        pass_1 = '1. Descargar el excel dando click en "Descargar Formato de Base de Datos".\n'
+        pass_2 = '2. Seleccionar la carpeta donde se descargarán los PDFs en DIRECTORIO DE DESCARGAS.\n'
+        pass_3 = '3. Seleccionar el Excel que fue llenado con los datos en DIRECTORIO ARCHIVO EXCEL.\n'
+        pass_4 = '4. Si quieres unir todos los PDFs descargados activa el checkbox "¿Unir los PDFs?" y darle a "Guardar Cambios".\n'
+        pass_5 = '5. Click al botón "Ejecutar Script" y comenzará el proceso de descarga masiva.\n'
+        pass_6 = '6. En caso de que ya tengas todos los PDFs en una carpeta y solo quieras unir debes seleccionar la carpeta en "DIRECTORIO DE DESCARGAS" y darle al botón "Unir todos los PDFs".\n'
+
+        pass_7 = 'Nota: Toma en cuenta que siempre que realices un cambio debes darle al botón "Guardar Cambios".'
+
+
+
+        info_text = f"{description}\n\n{url_info}\n\n{campo_1}\n{btn}\n{campo_2}\n{campo_3}\n\n{use}\n{pass_1}\n{pass_2}\n{pass_3}\n{pass_4}\n{pass_5}\n{pass_6}\n{pass_7}"
+
+        info_window = tk.Toplevel(self.root)
+        info_window.title("Información de la Aplicación")
+        info_window.geometry("650x600")
+        info_label = tk.Label(info_window, text=info_text, justify=tk.LEFT, padx=5, pady=5, wraplength=600)
+        info_label.pack()
