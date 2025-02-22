@@ -2,6 +2,7 @@ import tkinter as tk
 import traceback
 import PyPDF2
 import os
+import pandas as pd
 
 from tkinter import messagebox, filedialog
 
@@ -10,14 +11,13 @@ from data.FileAddress import FileAddress
 from business.PDFInvoiceDownloader import PDFInvoiceDownloader
 from business.ExcelDataExtractor import ExcelDataExtractor
 from data.UtilDownload import UtilDownload
-from business.PDFInvoiceChecker import PDFInvoiceChecker
 
 class PPrincipal:
     def __init__(self, root):
         self.root = root
         self.root.title("EJECUTADOR DE FACTURAS SIAT")
-        self.root.geometry("950x650")
-        self.root.config(bg="#dbdbdb")
+        self.root.geometry("950x450")
+        self.root.config(bg="#e6f2ff")
         
         # Objetos con valores iniciales
         self.base_url_siat = BaseUrlSiat(
@@ -43,10 +43,11 @@ class PPrincipal:
         font_style_entry = ("Arial", 12)
         entry_width = 45
         entry_width_small = 12
-        entry_width_verify = 65
         padding_y = 3
+        bg_required = "#FFF3CD"
+        fg_required = "#856404"
         
-        tk.Label(self.root, text="Siat: url", font=font_style_label).pack(pady=padding_y)
+        tk.Label(self.root, text="Siat: url", font=font_style_label, bg=bg_required, fg=fg_required).pack(pady=padding_y)
         self.entry_url_siat = tk.Entry(self.root, width=entry_width, font=font_style_entry)
         self.entry_url_siat.insert(0, self.base_url_siat.url_siat)
         self.entry_url_siat.pack(pady=padding_y)
@@ -56,25 +57,25 @@ class PPrincipal:
         frame_info_siat.pack(pady=10)
 
         # Etiqueta y campo para NIT
-        tk.Label(frame_info_siat, text="Siat: nit", font=font_style_label).grid(row=0, column=0, padx=5)
+        tk.Label(frame_info_siat, text="Siat: nit", font=font_style_label, bg=bg_required, fg=fg_required).grid(row=0, column=0, padx=5)
         self.entry_nit = tk.Entry(frame_info_siat, width=entry_width_small, font=font_style_entry)
         self.entry_nit.insert(0, self.base_url_siat.nit)
         self.entry_nit.grid(row=0, column=1, padx=5)
 
         # Etiqueta y campo para CUF
-        tk.Label(frame_info_siat, text="Siat: cuf", font=font_style_label).grid(row=0, column=2, padx=5)
+        tk.Label(frame_info_siat, text="Siat: cuf", font=font_style_label, bg=bg_required, fg=fg_required).grid(row=0, column=2, padx=5)
         self.entry_cuf = tk.Entry(frame_info_siat, width=entry_width_small, font=font_style_entry)
         self.entry_cuf.insert(0, self.base_url_siat.cuf)
         self.entry_cuf.grid(row=0, column=3, padx=5)
 
         # Etiqueta y campo para Número de Factura
-        tk.Label(frame_info_siat, text="Siat: número de Factura", font=font_style_label).grid(row=0, column=4, padx=5)
+        tk.Label(frame_info_siat, text="Siat: número de Factura", font=font_style_label, bg=bg_required, fg=fg_required).grid(row=0, column=4, padx=5)
         self.entry_nro_factura = tk.Entry(frame_info_siat, width=entry_width_small, font=font_style_entry)
         self.entry_nro_factura.insert(0, self.base_url_siat.nro_factura)
         self.entry_nro_factura.grid(row=0, column=5, padx=5)
 
         # Etiqueta y campo para Tipo
-        tk.Label(frame_info_siat, text="Siat: tipo", font=font_style_label).grid(row=0, column=6, padx=5)
+        tk.Label(frame_info_siat, text="Siat: tipo", font=font_style_label, bg=bg_required, fg=fg_required).grid(row=0, column=6, padx=5)
         self.entry_tipo = tk.Entry(frame_info_siat, width=entry_width_small, font=font_style_entry)
         self.entry_tipo.insert(0, self.base_url_siat.tipo)
         self.entry_tipo.grid(row=0, column=7, padx=5)
@@ -83,18 +84,18 @@ class PPrincipal:
         frame_time_btn = tk.Frame(self.root)
         frame_time_btn.pack(pady=10)
 
-        tk.Label(frame_time_btn, text="Tiempo de descarga (segundos):", font=font_style_label).grid(row=0, column=0, padx=5)
+        tk.Label(frame_time_btn, text="Tiempo de descarga (segundos):", font=font_style_label, bg=bg_required, fg=fg_required).grid(row=0, column=0, padx=5)
         self.entry_timer = tk.Entry(frame_time_btn, width=5, font=font_style_entry)
         self.entry_timer.insert(0, str(self.util_download.seconds_download))
         self.entry_timer.grid(row=0, column=1, padx=5)
 
-        tk.Label(frame_time_btn, text="Texto del botón:", font=font_style_label).grid(row=0, column=2, padx=5)
+        tk.Label(frame_time_btn, text="Texto del botón:", font=font_style_label, bg=bg_required, fg=fg_required).grid(row=0, column=2, padx=5)
         self.entry_btn_name = tk.Entry(frame_time_btn, width=15, font=font_style_entry)
         self.entry_btn_name.insert(0, str(self.util_download.btn_name))
         self.entry_btn_name.grid(row=0, column=3, padx=5)
         
         # Selector de carpeta para Descargas
-        tk.Label(self.root, text="Directorio de Descargas:", font=font_style_label).pack(pady=padding_y)
+        tk.Label(self.root, text="Directorio de Descargas:", font=font_style_label, bg=bg_required, fg=fg_required).pack(pady=padding_y)
         frame_download = tk.Frame(self.root)
         frame_download.pack(pady=padding_y)
         
@@ -105,7 +106,7 @@ class PPrincipal:
         tk.Button(frame_download, text="📂", command=self.select_download_directory, bg="yellow", fg="black").pack(side=tk.LEFT, padx=5)
 
         # Selector de archivo Excel
-        tk.Label(self.root, text="Directorio Archivo Excel:", font=font_style_label).pack(pady=padding_y)
+        tk.Label(self.root, text="Directorio Archivo Excel:", font=font_style_label, bg=bg_required, fg=fg_required).pack(pady=padding_y)
         frame_excel = tk.Frame(self.root)
         frame_excel.pack(pady=padding_y)
         
@@ -131,23 +132,7 @@ class PPrincipal:
         tk.Button(frame_buttons, text="🚀 Ejecutar Script", command=self.execute_script, font=font_style_entry, bg="lightgreen", fg="black").pack(side="left", padx=5)
         tk.Button(frame_buttons, text="📑 Unir todos los PDF", command=self.join_all_pdfs, font=font_style_entry, bg="pink", fg="black").pack(side="left", padx=5)
 
-        # Campos para verificar
-        tk.Label(self.root , text="Nombre / Razón Social:", font=font_style_label).pack(pady=padding_y)
-        self.entry_name_social_reason = tk.Entry(self.root , width=entry_width_verify, font=font_style_entry)
-        self.entry_name_social_reason.insert(0, str(''))
-        self.entry_name_social_reason.pack(pady=padding_y)
-
-        tk.Label(self.root , text="NIT / CI / CEX:", font=font_style_label).pack(pady=padding_y)
-        self.entry_nit_ci_cex = tk.Entry(self.root , width=entry_width_verify, font=font_style_entry)
-        self.entry_nit_ci_cex.insert(0, str(''))
-        self.entry_nit_ci_cex.pack(pady=padding_y)
-
-        tk.Label(self.root , text="Cod. Cliente:", font=font_style_label).pack(pady=padding_y)
-        self.entry_cod_client= tk.Entry(self.root , width=entry_width_verify, font=font_style_entry)
-        self.entry_cod_client.insert(0, str(''))
-        self.entry_cod_client.pack(pady=padding_y)
-
-        tk.Button(self.root, text="🔎 Verificar Datos", command=self.verify_data_pdf, font=font_style_entry, bg="purple", fg="white").pack(pady=15)
+        tk.Button(self.root, text="🖥️ Descargar Formato de Base de Datos", command=self.download_bd_pdf, font=font_style_entry, bg="purple", fg="white").pack(pady=5)
 
 
     def select_download_directory(self):
@@ -181,6 +166,23 @@ class PPrincipal:
         
     def execute_script(self):
         try:
+            # Diccionario con el nombre de los campos y sus valores
+            fields = {
+                "SIAT: URL": self.entry_url_siat.get().strip(),
+                "SIAT: NIT": self.entry_nit.get().strip(),
+                "SIAT: CUF": self.entry_cuf.get().strip(),
+                "SIAT: Nro Factura": self.entry_nro_factura.get().strip(),
+                "SIAT: Tipo": self.entry_tipo.get().strip(),
+                "SIAT: Tiempo de descarga": self.entry_timer.get().strip(),
+                "SIAT: Texto del Botón": self.entry_btn_name.get().strip(),
+                "Directorio de Descargas": self.entry_download_directory.get().strip(),
+                "Directorio Archivo Excel": self.entry_excel_file.get().strip()
+            }
+
+            # Verificar campos y detener si hay errores
+            if not self.validator_fields(fields):
+                return 
+            
             excel_data_extractor = ExcelDataExtractor(self.file_address.excel_file_path, self.base_url_siat)
             pdf_invoice_downloader = PDFInvoiceDownloader(
                 file_address=self.file_address,
@@ -189,7 +191,9 @@ class PPrincipal:
             )
             
             pdf_invoice_downloader.download_invoices()
-            self.join_all_pdfs()
+
+            if self.merge_pdfs_var.get() == 1:
+                self.join_all_pdfs()
 
             messagebox.showinfo("Éxito", "Finalizó la ejecución del Script")
         except Exception as e:
@@ -201,6 +205,21 @@ class PPrincipal:
 
 
     def join_all_pdfs(self):
+
+        # Preguntar al usuario si está seguro
+        confirm = messagebox.askyesno("Confirmación", "¿Estás seguro de que deseas unir todos los PDFs?")
+        
+        if not confirm:
+            return  
+        
+        fields = {
+            "Directorios de Descargas": self.entry_download_directory.get().strip()
+        }
+
+        # Verificar campos y detener si hay errores
+        if not self.validator_fields(fields):
+            return 
+    
         download_dir = os.path.abspath(self.file_address.download_directory)
         output_pdf_path = os.path.join(download_dir, "consolidado_de_facturas.pdf")
 
@@ -226,20 +245,48 @@ class PPrincipal:
 
         messagebox.showinfo("Éxito", f"PDFs unidos exitosamente en:\n{output_pdf_path}")
 
-    def verify_data_pdf(self):
+
+    def download_bd_pdf(self):
         try:
-            pdf_invoice_cheker = PDFInvoiceChecker(
-                file_address=self.file_address
-            )
+            # 1️⃣ - CREAR DATOS DE EJEMPLO
+            data = [
+                {
+                    "nro": 1,
+                    "nit": 1028627025,
+                    "nro_factura": 195663,
+                    "cuf": "4661AB1B43247CC29DF49FF5AE324D277DA4378B675D0DA04E8449E74",
+                    "tipo": 2
+                }
+            ]
 
-            print(str(pdf_invoice_cheker.count_pdfs()))
+            # 2️⃣ - CREAR DATAFRAME
+            df = pd.DataFrame(data)
 
-            # print(pdf_invoice_cheker.check_fields_in_pdfs('D:\Proyectos Trabajo\FACT_SIAT_PY\descargas\Factura 1.pdf','MONTALVO SILES TEO JAVIER','9620066','C873936'))
+            # 3️⃣ - SELECCIONAR RUTA PARA GUARDAR
+            file_path = filedialog.asksaveasfilename(defaultextension=".xlsx",
+                                                    filetypes=[("Excel files", "*.xlsx")],
+                                                    title="Base_de_datos")
+            if not file_path:
+                return  # Usuario canceló
 
-            # messagebox.showinfo("Éxito", "Finalizó la ejecución del Script")
+            # 4️⃣ - EXPORTAR A EXCEL
+            df.to_excel(file_path, index=False, engine='openpyxl')
+
+            # 5️⃣ - MENSAJE DE ÉXITO
+            messagebox.showinfo("Éxito", f"El archivo se guardó correctamente en:\n{file_path}")
+
         except Exception as e:
-            
-            error_message = f"Ocurrió un error: {str(e)}"
-            # pdf_invoice_downloader.driver.quit()
-            traceback.print_exc()  
-            messagebox.showerror("Error", error_message)
+            messagebox.showerror("Error", f"Ocurrió un error al generar el Excel:\n{str(e)}")
+
+
+    def validator_fields(self, fields):
+        # Identificar los campos vacíos
+        empty_fields = [name for name, value in fields.items() if not value]
+
+        if empty_fields:
+            # Generar mensaje con los campos vacíos
+            missing = "\n".join(empty_fields)
+            messagebox.showwarning("Advertencia", f"Por favor, completa los siguientes campos:\n{missing}")
+            return False  # Indica que hay errores
+
+        return True  # Todos los campos están completos
