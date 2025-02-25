@@ -16,7 +16,7 @@ class ConnectionSQLite:
 
     def _init_db(self):
         """Inicializa la conexión y crea la tabla si no existe"""
-        self.connection = sqlite3.connect("src/data/database/bd", check_same_thread=False)
+        self.connection = sqlite3.connect("src/data/database/bd.sqlite3", check_same_thread=False)
         self.cursor = self.connection.cursor()
         self.create_table()
 
@@ -65,13 +65,13 @@ class ConnectionSQLite:
 
 # db = ConnectionSQLite()
 
-# # Crear usuarios
+# Crear usuarios
 # db.create_users([
 #     ("Juan Pérez", "juanp", "1234"),
 #     ("Ana López", "ana.l", "admin"),
 #     ("Carlos García", "carlosg", "secreto")
 # ])
 
-# # Intentar iniciar sesión
+# Intentar iniciar sesión
 # db.login("juanp", "1234")  # ✅ Correcto
 # db.login("ana.l", "incorrecto")  # ❌ Incorrecto
