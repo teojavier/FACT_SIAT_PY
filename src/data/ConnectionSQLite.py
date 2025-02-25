@@ -41,7 +41,6 @@ class ConnectionSQLite:
             hashed_users = [(name, user, hashlib.sha256(password.encode()).hexdigest()) for name, user, password in users]
             self.cursor.executemany("INSERT INTO users (name, user, pass) VALUES (?, ?, ?)", hashed_users)
             self.connection.commit()
-            print("✅ Usuarios creados correctamente.")
         except sqlite3.IntegrityError:
             print("❌ Error: El usuario ya existe.")
 
@@ -56,10 +55,8 @@ class ConnectionSQLite:
                             (username, hashlib.sha256(password.encode()).hexdigest()))
         user = self.cursor.fetchone()
         if user:
-            print("✅ Inicio de sesión exitoso.")
             return True
         else:
-            print("❌ Usuario o contraseña incorrectos.")
             return False
 
 
