@@ -1,6 +1,8 @@
 import sqlite3
 import hashlib
 import threading
+import os
+
 
 class ConnectionSQLite:
     _instance = None
@@ -16,7 +18,10 @@ class ConnectionSQLite:
 
     def _init_db(self):
         """Inicializa la conexión y crea la tabla si no existe"""
-        self.connection = sqlite3.connect("src/data/database/bd.sqlite3", check_same_thread=False)
+        base_dir = os.path.dirname(os.path.abspath(__file__))  # Obtiene la ruta de `ConnectionSQLite.py`
+        db_path = os.path.join(base_dir, "database", "bd.sqlite3")  # Construye la ruta a la base de datos
+
+        self.connection = sqlite3.connect(db_path, check_same_thread=False)
         self.cursor = self.connection.cursor()
         self.create_table()
 
