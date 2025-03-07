@@ -40,7 +40,9 @@ class PDFInvoiceDownloader:
         chrome_options.add_argument("--disable-popup-blocking")
 
         # Configurar WebDriver
-        service = Service(os.path.abspath("chrome_driver/chromedriver.exe"))
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        cd_path = os.path.join(base_dir, "chrome_driver", "chromedriver.exe")
+        service = Service(os.path.abspath(cd_path))
         driver = webdriver.Chrome(service=service, options=chrome_options)
 
         return driver
