@@ -67,12 +67,13 @@ class ConnectionSQLite:
 
 # db = ConnectionSQLite()
 
-# Crear usuarios
+# # Crear usuarios
 # db.create_users([
-#     ("Juan Pérez", "juanp", "1234"),
-#     ("Ana López", "ana.l", "admin"),
-#     ("Carlos García", "carlosg", "secreto")
+#     ("ADMINISTRADOR", "admin", "1234")
 # ])
+
+# # consulta
+# python data\ConnectionSQLite.py
 
 # Intentar iniciar sesión
 # db.login("juanp", "1234")  # ✅ Correcto

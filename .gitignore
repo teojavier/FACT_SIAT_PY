@@ -1,1 +1,4 @@
 /env
+/business/_pycache_
+/data/_pycache_
+/presentation/_pycache_
